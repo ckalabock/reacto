@@ -1,0 +1,51 @@
+﻿/* src/components/QuickActions.css */
+.quick-actions {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quick-actions h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    text-align: center;
+}
+
+.actions-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.complete-all {
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    color: white;
+}
+
+.reset-all {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.random-next {
+    background: linear-gradient(135deg, #45b7d1, #3a9cb4);
+    color: white;
+}
