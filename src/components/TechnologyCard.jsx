@@ -1,13 +1,18 @@
 ﻿// src/components/TechnologyCard.jsx
 import './TechnologyCard.css';
 
-function TechnologyCard({ id, title, description, status, onStatusChange }) {
-    // Обработчик клика по карточке
+function TechnologyCard({ technology, onStatusChange, onEdit }) {
+    const { id, title, description, status, notes } = technology;
+
     const handleClick = () => {
         onStatusChange(id);
     };
 
-    // Получаем иконку и текст в зависимости от статуса
+    const handleEditClick = (e) => {
+        e.stopPropagation();
+        onEdit(technology);
+    };
+
     const getStatusInfo = () => {
         switch (status) {
             case 'not-started':
@@ -30,9 +35,19 @@ function TechnologyCard({ id, title, description, status, onStatusChange }) {
         >
             <div className="card-header">
                 <h3>{title}</h3>
-                <span className="status-icon">{statusInfo.icon}</span>
+                <div className="card-actions">
+                    <button className="edit-btn" onClick={handleEditClick} title="Редактировать заметки">
+                        📝
+                    </button>
+                    <span className="status-icon">{statusInfo.icon}</span>
+                </div>
             </div>
             <p className="description">{description}</p>
+            {notes && (
+                <div className="notes-preview">
+                    <strong>Заметки:</strong> {notes.substring(0, 50)}...
+                </div>
+            )}
             <div className="status-info">
                 <span className="status-text">Статус: {statusInfo.text}</span>
             </div>

@@ -1,4 +1,5 @@
-﻿import './QuickActions.css';
+﻿// src/components/QuickActions.jsx
+import './QuickActions.css';
 
 function QuickActions({ technologies, setTechnologies }) {
     // Действие: отметить все как выполненные
@@ -15,29 +16,19 @@ function QuickActions({ technologies, setTechnologies }) {
         );
     };
 
-    // Действие: случайный выбор следующей технологии (ТОЛЬКО НЕ НАЧАТЫЕ)
-    const randomNext = () => {
-        // Фильтруем ТОЛЬКО технологии со статусом "not-started"
-        const notStartedTechs = technologies.filter(tech => tech.status === 'not-started');
+    // Действие: экспорт данных
+    const exportData = () => {
+        const data = {
+            exportedAt: new Date().toISOString(),
+            technologies: technologies
+        };
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
 
-        if (notStartedTechs.length === 0) {
-            alert('Все технологии уже начаты или изучены! 🎉\n\nИспользуйте кнопку "Сбросить все статусы", чтобы начать заново.');
-            return;
-        }
-
-        // Выбираем случайную технологию из не начатых
-        const randomTech = notStartedTechs[Math.floor(Math.random() * notStartedTechs.length)];
-
-        // Устанавливаем выбранной технологии статус "in-progress"
-        setTechnologies(prevTech =>
-            prevTech.map(tech =>
-                tech.id === randomTech.id
-                    ? { ...tech, status: 'in-progress' }
-                    : tech
-            )
-        );
-
-        alert(`🎯 Следующая технология для изучения:\n\n"${randomTech.title}"\n\n${randomTech.description}`);
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `technologies-export-${new Date().getTime()}.json`;
+        link.click();
     };
 
     return (
@@ -59,10 +50,10 @@ function QuickActions({ technologies, setTechnologies }) {
                 </button>
 
                 <button
-                    className="action-btn random-next"
-                    onClick={randomNext}
+                    className="action-btn export-data"
+                    onClick={exportData}
                 >
-                    🎲 Случайный выбор из не начатых
+                    📤 Экспорт данных
                 </button>
             </div>
         </div>
