@@ -60,7 +60,7 @@ function App() {
                 setActiveFilter={setActiveFilter}
             />
 
-            {/* Список технологий */}
+            {/* Список технологий й*/}
             <div className="technologies-grid">
                 {filteredTechnologies.map(tech => (
                     <TechnologyCard
