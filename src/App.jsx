@@ -103,11 +103,11 @@ function App() {
             </div>
 
              {/*Модальное окно редактирования*/}
-            {/*<TechnologyModal*/}
-            {/*    technology={editingTech}*/}
-            {/*    onSave={saveNotes}*/}
-            {/*    onClose={() => setEditingTech(null)}*/}
-            {/*/>*/}
+            <TechnologyModal
+                technology={editingTech}
+                onSave={saveNotes}
+                onClose={() => setEditingTech(null)}
+            />
         </div>
     );
 }
