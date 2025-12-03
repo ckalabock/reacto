@@ -1,14 +1,17 @@
-name: Deploy React App to GitHub Pages
+name: Deploy React App
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main, master ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     
     steps:
       - name: Checkout
@@ -18,23 +21,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
-        run: npm run build
-
-      - name: Verify build folder exists
         run: |
-          ls -la
-          echo "Checking build folder:"
-          ls -la build/ || echo "Build folder doesn't exist"
+          npm run build
+          touch build/.nojekyll  # Для корректной работы SPA
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: build
-          token: ${{ secrets.GITHUB_TOKEN }}
+          path: './build'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
