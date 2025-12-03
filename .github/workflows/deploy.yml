@@ -1,4 +1,4 @@
-name: Deploy React App to GitHub Pages
+name: Deploy Static Site
 
 on:
   push:
@@ -16,31 +16,64 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
+      - name: Create build folder with content
         run: |
-          if [ -f "package.json" ]; then
-            # Проверяем, есть ли скрипт build
-            if grep -q '"build"' package.json; then
-              npm run build
-            else
-              # Если нет скрипта build, создаем простой
-              mkdir -p build
-              echo '<!DOCTYPE html><html><head><title>React App</title></head><body><h1>React App is Building...</h1></body></html>' > build/index.html
-            fi
-          else
-            # Если нет package.json, создаем минимальный сайт
-            mkdir -p build
-            echo '<!DOCTYPE html><html><head><title>My Site</title></head><body><h1>Hello from GitHub Pages!</h1></body></html>' > build/index.html
-          fi
+          # Создаем папку build
+          mkdir -p build
+          
+          # Создаем index.html
+          echo '<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>My React App</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      text-align: center;
+                      padding: 50px;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      color: white;
+                      min-height: 100vh;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+                  }
+                  h1 {
+                      font-size: 3em;
+                      margin-bottom: 20px;
+                  }
+                  p {
+                      font-size: 1.2em;
+                      max-width: 600px;
+                      margin: 0 auto 30px;
+                  }
+                  .deploy-date {
+                      background: rgba(255, 255, 255, 0.1);
+                      padding: 10px 20px;
+                      border-radius: 10px;
+                      margin-top: 20px;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>🚀 Site is Live!</h1>
+              <p>Your React application is being deployed via GitHub Actions.</p>
+              <p>If you see this page, the deployment is working correctly.</p>
+              <div class="deploy-date">
+                  Deployment date: $(date)
+              </div>
+          </body>
+          </html>' > build/index.html
+          
+          # Создаем файл .nojekyll для правильной работы
+          touch build/.nojekyll
+          
+          # Проверяем, что создалось
+          echo "Build folder contents:"
+          ls -la build/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -48,7 +81,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build/'
+          path: 'build'
 
   deploy:
     environment:
